@@ -9,32 +9,32 @@ public class Branch {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="branch_id")
-    private int branchID;
+    private int branchId;
     @Column(name="branch_name")
     private String branchName;
     private String address;
 
-    @OneToMany(mappedBy = "branchId")
+    @OneToMany(mappedBy = "branch",orphanRemoval=true)
     private Set<BookLending> bookLendings;
 
-    @OneToMany(mappedBy = "branchId")
+    @OneToMany(mappedBy = "branch",orphanRemoval=true)
     private Set<BookCopies> bookCopies;
 
     @Override
     public String toString() {
         return "Branch{" +
-                "branchID=" + branchID +
+                "branchID=" + branchId +
                 ", branchName='" + branchName + '\'' +
                 ", address='" + address + '\'' +
                 '}';
     }
 
     public int getBranchID() {
-        return branchID;
+        return branchId;
     }
 
     public void setBranchID(int branchID) {
-        this.branchID = branchID;
+        this.branchId = branchID;
     }
 
     public String getBranchName() {

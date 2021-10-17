@@ -16,7 +16,7 @@ public class Publisher {
     private String address;
     private String phone;
 
-    @OneToMany(mappedBy = "publisherName")
+    @OneToMany(mappedBy = "publisher",orphanRemoval=true)
     private Set<Book> book;
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.entities.Book;
 import com.example.demo.entities.BookCopies;
 import com.example.demo.entities.Publisher;
 import com.example.demo.exceptions.CustomException;
@@ -31,7 +32,7 @@ public class BookCopiesController {
 
     @GetMapping("/getCopies/{branchId}/{bookId}")
     public ResponseEntity<?> getCopies(@PathVariable("branchId") int branchId, @PathVariable("bookId") int bookId) throws CustomException {
-        return bookCopiesService.getCopies(new BookCopiesID(branchId,bookId));
+        return bookCopiesService.getCopies(new BookCopiesID(bookId,branchId));
     }
 
 

@@ -24,7 +24,7 @@ public class Card {
 
     private String name;
 
-    @OneToMany(mappedBy = "cardNo")
+    @OneToMany(mappedBy = "card",orphanRemoval=true)
     private Set<BookLending> bookLendings;
 
     @Override

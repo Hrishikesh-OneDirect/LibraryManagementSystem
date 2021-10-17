@@ -4,6 +4,7 @@ import com.example.demo.entities.Book;
 import com.example.demo.entities.Publisher;
 import com.example.demo.exceptions.CustomException;
 import com.example.demo.repositories.BookRepo;
+import com.example.demo.repositories.PublisherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,21 @@ import java.util.Optional;
 public class BookController {
     @Autowired
     BookRepo bookRepo;
+    @Autowired
+    PublisherRepo publisherRepo;
     @GetMapping("/getAllBooks")
     public List<Book> getAllBooks(){
-        return bookRepo.findAll();
+        List<Book> bookList = bookRepo.findAll();
+        for(Book book:bookList){
+            book.setPublisherName(book.getPublisher().getName());
+        }
+        return bookList;
     }
 
     @PostMapping("/addBook")
     public ResponseEntity<?> addBook(@RequestBody Book book) throws CustomException{
         try{
+            book.setPublisher(publisherRepo.getById(book.getPublisherName()));
             bookRepo.save(book);
             return new ResponseEntity<>("Book added Successfully", HttpStatus.OK);
         }catch(Exception e){
@@ -36,6 +44,8 @@ public class BookController {
     public ResponseEntity<?> getBookById(@PathVariable int bookId) throws CustomException{
         Optional<Book> book = bookRepo.findById(bookId);
         if(book.isPresent()){
+            Book returnBook = book.get();
+            returnBook.setPublisherName(returnBook.getPublisher().getName());
             return new ResponseEntity<>(book.get(),HttpStatus.OK);
         }else{
             throw new CustomException("Invalid book ID");
@@ -61,6 +71,9 @@ public class BookController {
             if (bookList.size()==0){
                 throw new CustomException("Book not found");
             }
+        for(Book book1:bookList){
+            book1.setPublisherName(book1.getPublisher().getName());
+        }
             return new ResponseEntity<>(bookList,HttpStatus.OK);
     }
 

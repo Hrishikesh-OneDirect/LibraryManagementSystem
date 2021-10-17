@@ -19,6 +19,7 @@ public class BookLendingController {
     @GetMapping("/getAllLendingInfo")
     public List<BookLending> getAllLendingInfo(){
         return lendingService.getLendingInfo();
+
     }
     @PostMapping("/lendBook")
     public ResponseEntity<?> lendBook(@RequestBody BookLending bookLending) throws CustomException {
