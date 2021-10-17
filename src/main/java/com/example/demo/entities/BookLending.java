@@ -36,12 +36,19 @@ public class BookLending {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-    @JoinColumn(name = "book_id",referencedColumnName = "bookId")
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Book.class)
+    @JoinColumn(name = "book_id")
     private int bookId;
-    @JoinColumn(name = "branch_id",referencedColumnName = "branchId")
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Branch.class)
+    @JoinColumn(name = "branch_id")
     private int branchId;
-    @JoinColumn(referencedColumnName = "cardNo")
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Card.class)
+    @JoinColumn(name="card_no")
     private int cardNo;
+
     @Column(name="date_out")
     private Date checkoutDate;
     @Column(name="due_date")

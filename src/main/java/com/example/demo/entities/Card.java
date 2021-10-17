@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import javax.persistence.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name="card")
@@ -22,6 +23,9 @@ public class Card {
     private int cardNo;
 
     private String name;
+
+    @OneToMany(mappedBy = "cardNo")
+    private Set<BookLending> bookLendings;
 
     @Override
     public String toString() {

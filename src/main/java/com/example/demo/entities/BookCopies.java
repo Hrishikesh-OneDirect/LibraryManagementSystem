@@ -43,13 +43,17 @@ public class BookCopies {
     }
 
     @Id
-    @JoinColumn(name = "book_id",referencedColumnName = "bookId")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Book.class)
+    @JoinColumn(name = "book_id")
     private int bookId;
 
     @Id
-    @JoinColumn(name = "branch_id",referencedColumnName = "branchId")
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Branch.class)
+    @JoinColumn(name = "branch_id")
     private int branchId;
 
     @Column(name = "no_of_copies")
     private int noOfCopies;
+
+
 }

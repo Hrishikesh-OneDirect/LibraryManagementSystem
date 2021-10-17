@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="Library_Branch")
@@ -12,6 +13,12 @@ public class Branch {
     @Column(name="branch_name")
     private String branchName;
     private String address;
+
+    @OneToMany(mappedBy = "branchId")
+    private Set<BookLending> bookLendings;
+
+    @OneToMany(mappedBy = "branchId")
+    private Set<BookCopies> bookCopies;
 
     @Override
     public String toString() {

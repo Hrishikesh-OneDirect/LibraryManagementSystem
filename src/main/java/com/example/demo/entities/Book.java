@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name="Book")
@@ -14,10 +15,18 @@ public class Book {
     private int bookId;
 
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Publisher.class)
     @JoinColumn(name="publisher_name",referencedColumnName = "name")
     private String publisherName;
     @Column(name="pub_year")
     private Date publisherYear;
+
+    @OneToMany(mappedBy = "bookId")
+    private Set<BookLending> bookLending;
+
+    @OneToMany(mappedBy = "bookId")
+    private Set<BookCopies> bookCopies;
 
     @Override
     public String toString() {

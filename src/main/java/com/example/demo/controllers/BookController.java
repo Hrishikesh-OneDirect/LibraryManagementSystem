@@ -27,6 +27,7 @@ public class BookController {
             bookRepo.save(book);
             return new ResponseEntity<>("Book added Successfully", HttpStatus.OK);
         }catch(Exception e){
+            System.out.println("Exception...."+e);
             throw new CustomException("Invalid publisher name");
         }
     }
