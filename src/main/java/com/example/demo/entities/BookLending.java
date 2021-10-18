@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
 import com.example.demo.id.BookLendingID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -36,12 +38,56 @@ public class BookLending {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
-    @JoinColumn(name = "book_id",referencedColumnName = "bookId")
+
+    @Transient
+    @JsonProperty
     private int bookId;
-    @JoinColumn(name = "branch_id",referencedColumnName = "branchId")
+    @Transient
+    @JsonProperty
     private int branchId;
-    @JoinColumn(referencedColumnName = "cardNo")
+    @Transient
+    @JsonProperty
     private int cardNo;
+
+    @JsonIgnore
+    @ManyToOne( targetEntity = Book.class)
+    @JoinColumn(name = "book_id")
+    private Book book;
+
+    @JsonIgnore
+    @ManyToOne( targetEntity = Branch.class)
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    @JsonIgnore
+    @ManyToOne( targetEntity = Card.class)
+    @JoinColumn(name="card_no")
+    private Card card;
+
     @Column(name="date_out")
     private Date checkoutDate;
     @Column(name="due_date")

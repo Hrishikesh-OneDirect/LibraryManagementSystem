@@ -5,6 +5,9 @@ import com.example.demo.entities.BookLending;
 import com.example.demo.exceptions.CustomException;
 import com.example.demo.id.BookCopiesID;
 import com.example.demo.repositories.BookLendingRepo;
+import com.example.demo.repositories.BookRepo;
+import com.example.demo.repositories.BranchRepo;
+import com.example.demo.repositories.CardRepo;
 import com.example.demo.service.BookCopiesService;
 import com.example.demo.service.LendingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +24,26 @@ public class LendingServiceImpl implements LendingService {
     BookLendingRepo bookLendingRepo;
 
     @Autowired
+    BookRepo bookRepo;
+
+    @Autowired
+    BranchRepo branchRepo;
+
+    @Autowired
+    CardRepo cardRepo;
+
+    @Autowired
     BookCopiesService bookCopiesService;
 
     @Override
     public List<BookLending> getLendingInfo() {
-        return bookLendingRepo.findAll();
+        List<BookLending> lendingList = bookLendingRepo.findAll();
+        for(BookLending lending:lendingList){
+            lending.setBookId(lending.getBook().getBookId());
+            lending.setBranchId(lending.getBranch().getBranchID());
+            lending.setCardNo(lending.getCard().getCardNo());
+        }
+        return lendingList;
     }
 
     @Override
@@ -39,6 +57,9 @@ public class LendingServiceImpl implements LendingService {
                 }
                 bookLending.setStatus(0);
                 try{
+                    bookLending.setBook(bookRepo.getById(bookLending.getBookId()));
+                    bookLending.setBranch(branchRepo.getById(bookLending.getBranchId()));
+                    bookLending.setCard(cardRepo.getById(bookLending.getCardNo()));
                     BookLending bookLending1 = bookLendingRepo.save(bookLending);
                     bookCopiesService.modifyBookCopiesCount(bookCopies,false);
                     return new ResponseEntity<>(bookLending1, HttpStatus.OK);
@@ -61,7 +82,13 @@ public class LendingServiceImpl implements LendingService {
         Optional<BookLending> optionalBookLending= bookLendingRepo.findById(id);
         if (optionalBookLending.isPresent()){
             BookLending bookLending = optionalBookLending.get();
+            if(bookLending.getStatus()==1){
+                throw  new CustomException("Book already returned");
+            }
             bookLending.setStatus(1);
+            bookLending.setBookId(bookLending.getBook().getBookId());
+            bookLending.setBranchId(bookLending.getBranch().getBranchID());
+            bookLending.setCardNo(bookLending.getCard().getCardNo());
             bookLendingRepo.save(bookLending);
             BookCopies bookCopies = bookCopiesService.getCopy(new BookCopiesID(bookLending.getBookId(),bookLending.getBranchId()));
                 bookCopiesService.modifyBookCopiesCount(bookCopies,true);

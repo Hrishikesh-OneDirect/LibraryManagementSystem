@@ -1,20 +1,23 @@
 package com.example.demo.entities;
 
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name="Publisher")
 public class Publisher {
     @Id
-    @NotBlank(message = "Name cannot be blank")
     private String name;
-
     private String address;
     private String phone;
+
+    @OneToMany(mappedBy = "publisher",orphanRemoval=true)
+    private Set<Book> book;
 
     @Override
     public String toString() {
