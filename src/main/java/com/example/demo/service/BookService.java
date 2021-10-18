@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.BookDTO;
 import com.example.demo.entities.Book;
 import com.example.demo.exceptions.CustomException;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public interface BookService {
     public List<Book> getAllBooks();
-    public ResponseEntity<?> addBook(@RequestBody BookDTO book) throws CustomException;
+    public ResponseEntity<?> addBook(@RequestBody Book book) throws CustomException;
     public ResponseEntity<?> getBookById(@PathVariable int bookId) throws CustomException;
     public ResponseEntity<?> deleteBook(@RequestBody Book book) throws CustomException;
     public ResponseEntity<?> getBookByTitle(@RequestBody Book book) throws CustomException;
